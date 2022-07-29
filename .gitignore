@@ -6,6 +6,7 @@ tools/*
 !tools/README.md
 !tools/get-tools.sh
 !tools/get-libraries.R
+!tools/qsmell-0
 !tools/qsmell
 
 # Ignore the directory that holds a clone of each quantum project
