@@ -32,7 +32,7 @@ class CLI:
     def config(self):
         parser = argparse.ArgumentParser(description='Detects quantum-based code smells in programs with in the Qiskit framework.')
         parser.add_argument('--version', '-v', action='version', version='%(prog)s {}'.format(self.version))
-        parser.add_argument('--smell-metric', '-s', help="Quantum smell metric to compute", required=False, type=SmellType, choices=list(SmellType), default=SmellType.CG)
+        parser.add_argument('--smell-metric', '-s', help="Quantum smell metric to compute", required=False, type=SmellType.argparse, choices=list(SmellType), default=SmellType.CG)
         parser.add_argument('--input-file', '-i', action='store', help="Quantum circuit to analyse as a matrix", required=True, type=pathlib.Path)
         parser.add_argument('--output-file', '-o', action='store', help="Output file", required=True, type=pathlib.Path)
         self.args = parser.parse_args()

@@ -24,3 +24,13 @@ class SmellType(Enum):
 
     def __str__(self):
         return self.value.name
+
+    def __repr__(self):
+        return str(self)
+
+    @staticmethod
+    def argparse(s):
+        try:
+            return SmellType[s.upper()]
+        except KeyError:
+            return s
