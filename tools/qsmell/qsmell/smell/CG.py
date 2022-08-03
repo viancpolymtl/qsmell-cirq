@@ -19,7 +19,7 @@ class CG(ISmell):
             'singlequbitunitary': 0
         }
 
-        qubits = [x for x in df.index.values if x.startswith('q-')]
+        qubits = [bit for bit in df.index if bit.startswith('q-')]
         for qubit in qubits:
             row = df.loc[qubit]
             for op in row:
