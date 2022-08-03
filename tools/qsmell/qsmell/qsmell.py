@@ -17,5 +17,5 @@ class QSmell:
         output_file_path: A string that contains the file local patch for the output.
     """
     def run(self, smell: SmellType, input_file_path: str, output_file_path: str) -> None:
-        df = pd.read_csv(input_file_path, sep=';', index_col=0)
+        df = pd.read_csv(input_file_path, sep=';', index_col=0, keep_default_na=False)
         smell.compute_metric(df, output_file_path)
