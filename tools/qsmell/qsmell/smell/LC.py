@@ -16,12 +16,12 @@ class LC(ISmell):
         max_num_ops_in_any_qubit = 0
         for qubit in qubits:
             row = df.loc[qubit]
-            max_num_ops_in_any_qubit = max(max_num_ops_in_any_qubit, len([op for op in row if op != '']))
+            max_num_ops_in_any_qubit = max(max_num_ops_in_any_qubit, len([op for op in row if op != '' and not op.lower().startswith('barrier')]))
 
         max_num_ops_in_parallel = 0
         for stamp in stamps:
             column = df[stamp]
-            max_num_ops_in_parallel = max(max_num_ops_in_parallel, len([op for op in column if op != '']))
+            max_num_ops_in_parallel = max(max_num_ops_in_parallel, len([op for op in column if op != '' and not op.lower().startswith('barrier')]))
 
         metric = max_num_ops_in_any_qubit * max_num_ops_in_parallel
 

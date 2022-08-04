@@ -23,8 +23,8 @@ class IdQ(ISmell):
             count = -1
             for stamp in stamps:
                 op = df.loc[qubit][stamp]
-                if op == 'barrier()':
-                    op = ''
+                if op.lower().startswith('barrier'):
+                    continue
 
                 if op == '' and count == -1:
                     # The first operation on qubit has not been found yet
