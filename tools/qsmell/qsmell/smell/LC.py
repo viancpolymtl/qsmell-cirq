@@ -25,6 +25,6 @@ class LC(ISmell):
 
         metric = max_num_ops_in_any_qubit * max_num_ops_in_parallel
 
-        out_df = pd.DataFrame.from_dict([{'metric': metric}])
+        out_df = pd.DataFrame.from_dict([{'lc': metric}])
         sys.stdout.write(str(out_df) + '\n')
         out_df.to_csv(output_file_path, header=True, index=False, mode='w')
