@@ -31,6 +31,6 @@ class SmellType(Enum):
     @staticmethod
     def argparse(s):
         try:
-            return SmellType[s.upper()]
+            return SmellType[s]
         except KeyError:
             return s
