@@ -1,5 +1,6 @@
 """ Idle qubits (IdQ) """
 
+import sys
 import pandas as pd
 from .ISmell import *
 
@@ -8,30 +9,40 @@ class IdQ(ISmell):
     def __init__(self):
         super().__init__("IdQ")
 
-    def find_max_consecutive_0(tf_table):
-        max_count = 0
-        current_count = 0
-        for val in tf_table:
-            if val == '0':
-                current_count += 1
-            if val == '1':
-                if current_count > max_count:
-                    max_count = current_count
-                current_count = 0
-        return max_count
-
     def compute_metric(self, df: pd.DataFrame, output_file_path: str) -> None:
-        result_list = list()
-        for row in content:
-            row = row[0]
-            row_list = row.split(';')
-            row_list = list(filter(lambda x: (x.strip() != ""), row_list))
-            tf_table = row[1:]
-            if '1' in tf_table:
-                first_1_index = tf_table.index('1')
-                tf_table = tf_table[first_1_index+1:]
-                max_count = find_max_consecutive_0(tf_table)
-                result_list.append(max_count)
-            else:
-                result_list.append(len(tf_table))
-        return result_list
+        qubits = [bit for bit in df.index if bit.startswith('q-')]
+        stamps = df.columns
+
+        metrics = {
+            'qubit': [],
+            'max_num_ops_idle': []
+        }
+
+        for qubit in qubits:
+            max_num_ops_in_between = 0
+            count = -1
+            for stamp in stamps:
+                op = df.loc[qubit][stamp]
+                if op == 'barrier()':
+                    op = ''
+
+                if op == '' and count == -1:
+                    # The first operation on qubit has not been found yet
+                    pass
+                elif op != '' and count == -1:
+                    # Found the first operation on qubit
+                    count = 0
+                elif op != '' and count != -1:
+                    # Found the second, or third, ... operation on qubit
+                    max_num_ops_in_between = max(max_num_ops_in_between, count)
+                    count = 0 # Reset counter
+                elif op == '' and count != -1:
+                    # Empty operation in between
+                    count += 1
+
+            metrics['qubit'].append(qubit)
+            metrics['max_num_ops_idle'].append(max_num_ops_in_between)
+
+        out_df = pd.DataFrame.from_dict(metrics)
+        sys.stdout.write(str(out_df) + '\n')
+        out_df.to_csv(output_file_path, header=True, index=False, mode='w')
