@@ -25,6 +25,9 @@ def create_folder_safely(folder_dir: str) -> None:
 
 
 def main():
+    if len(sys.argv) != 3:
+        print("Insufficient Amount of arguments")
+        exit(0)
     csv_root_dir = sys.argv[1]
     result_folder_dir = sys.argv[2]
     create_folder_safely(result_folder_dir)
