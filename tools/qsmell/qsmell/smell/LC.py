@@ -23,8 +23,11 @@ class LC(ISmell):
             column = df[stamp]
             max_num_ops_in_parallel = max(max_num_ops_in_parallel, len([op for op in column if op != '' and not op.lower().startswith('barrier')]))
 
-        metric = max_num_ops_in_any_qubit * max_num_ops_in_parallel
+        metrics = {
+            'metric': self._name,
+            'value': max_num_ops_in_any_qubit * max_num_ops_in_parallel
+        }
 
-        out_df = pd.DataFrame.from_dict([{'lc': metric}])
+        out_df = pd.DataFrame.from_dict([metrics])
         sys.stdout.write(str(out_df) + '\n')
         out_df.to_csv(output_file_path, header=True, index=False, mode='w')

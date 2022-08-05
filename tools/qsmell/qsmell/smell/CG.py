@@ -13,10 +13,11 @@ class CG(ISmell):
         return pure_name in target_call_name_list and set(type_name_list).intersection(set(iterable_type))
 
     def compute_metric(self, df: pd.DataFrame, output_file_path: str) -> None:
-        unitary_calls = {
-            'unitary': 0,
-            'hamiltonian': 0,
-            'singlequbitunitary': 0
+        unitary_calls = ['unitary', 'hamiltonian', 'singlequbitunitary']
+
+        metrics = {
+            'metric': self._name,
+            'value': 0
         }
 
         qubits = [bit for bit in df.index if bit.startswith('q-')]
@@ -25,9 +26,9 @@ class CG(ISmell):
             for op in row:
                 if op != '':
                     op = op.lower().split('(')[0]
-                    if op in unitary_calls.keys():
-                        unitary_calls[op] += 1
+                    if op in unitary_calls:
+                        metrics[value] += 1
 
-        out_df = pd.DataFrame.from_dict([unitary_calls])
+        out_df = pd.DataFrame.from_dict([metrics])
         sys.stdout.write(str(out_df) + '\n')
         out_df.to_csv(output_file_path, header=True, index=False, mode='w')

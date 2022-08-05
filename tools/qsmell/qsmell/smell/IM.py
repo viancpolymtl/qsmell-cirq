@@ -13,9 +13,13 @@ class IM(ISmell):
         qubits = [bit for bit in df.index if bit.startswith('q-')]
         stamps = df.columns
 
-        metric = False
+        metrics = {
+            'metric': self._name,
+            'value': 0 # False
+        }
+
         for qubit in qubits:
-            if metric == True:
+            if metrics['value'] == 1:
                 break
             row = df.loc[qubit]
 
@@ -27,10 +31,10 @@ class IM(ISmell):
                         is_there_a_measure = True
                     elif is_there_a_measure:
                         # Found another operation after measure
-                        metric = True
+                        metrics['value'] = 1
                         # No need to continue looking for, as this is at circuit level
                         break
 
-        out_df = pd.DataFrame.from_dict([{'im': metric}])
+        out_df = pd.DataFrame.from_dict([metrics])
         sys.stdout.write(str(out_df) + '\n')
         out_df.to_csv(output_file_path, header=True, index=False, mode='w')

@@ -14,8 +14,8 @@ class IQ(ISmell):
         stamps = df.columns
 
         metrics = {
-            'qubit': [],
-            'max_num_ops_between_init_and_use': []
+            'metric': self._name,
+            'value': 0
         }
 
         for qubit in qubits:
@@ -40,9 +40,8 @@ class IQ(ISmell):
                     # Empty operation in between
                     count += 1
 
-            metrics['qubit'].append(qubit)
-            metrics['max_num_ops_between_init_and_use'].append(max_num_ops_between_init_and_use)
+            metrics['value'] = max(metrics['value'], max_num_ops_between_init_and_use)
 
-        out_df = pd.DataFrame.from_dict(metrics)
+        out_df = pd.DataFrame.from_dict([metrics])
         sys.stdout.write(str(out_df) + '\n')
         out_df.to_csv(output_file_path, header=True, index=False, mode='w')
