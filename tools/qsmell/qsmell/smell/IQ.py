@@ -23,7 +23,7 @@ class IQ(ISmell):
             count = -1
             for stamp in stamps:
                 op = df.loc[qubit][stamp]
-                if op.lower().startswith('barrier'):
+                if op.lower().startswith('barrier'): # Ignore barriers
                     continue
 
                 if op == '' and count == -1:

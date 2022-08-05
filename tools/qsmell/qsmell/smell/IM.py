@@ -25,15 +25,19 @@ class IM(ISmell):
 
             is_there_a_measure = False
             for op in row:
-                if op != '' and not op.lower().startswith('barrier'):
-                    if op.lower().startswith('measure'):
-                        # Found a measure call
-                        is_there_a_measure = True
-                    elif is_there_a_measure:
-                        # Found another operation after measure
-                        metrics['value'] = 1
-                        # No need to continue looking for, as this is at circuit level
-                        break
+                if op == '': # Ignore stamps where the qubit is not used
+                    continue
+                if op.lower().startswith('barrier'): # Ignore barriers
+                    continue
+
+                if op.lower().startswith('measure'):
+                    # Found a measure call
+                    is_there_a_measure = True
+                elif is_there_a_measure:
+                    # Found another operation after measure
+                    metrics['value'] = 1
+                    # No need to continue looking for, as this is at circuit level
+                    break
 
         out_df = pd.DataFrame.from_dict([metrics])
         sys.stdout.write(str(out_df) + '\n')

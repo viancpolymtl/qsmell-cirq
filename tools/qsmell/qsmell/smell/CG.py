@@ -24,10 +24,9 @@ class CG(ISmell):
         for qubit in qubits:
             row = df.loc[qubit]
             for op in row:
-                if op != '':
-                    op = op.lower().split('(')[0]
-                    if op in unitary_calls:
-                        metrics[value] += 1
+                op = op.lower().split('(')[0]
+                if op in unitary_calls:
+                    metrics[value] += 1
 
         out_df = pd.DataFrame.from_dict([metrics])
         sys.stdout.write(str(out_df) + '\n')
