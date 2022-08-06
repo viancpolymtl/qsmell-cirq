@@ -38,7 +38,6 @@ def main():
             for file_name in os.listdir(input_root_dir):
                 if not file_name.endswith(".py"):
                     continue
-                print("working on file name = ", file_name)
                 file_dir = input_root_dir + file_name
                 my_parsed_object = parse_file(file_dir)
                 my_circuit_bit_object = parse_circuit_bit_info(my_parsed_object)

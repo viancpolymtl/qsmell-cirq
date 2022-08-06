@@ -191,7 +191,7 @@ def find_associated_parameter_index(associated_parameter_name, function_implemen
 
 
 def load_keyword_list():
-    target_call_file_dir = "/Users/qihongchen/Desktop/quantum_smell_project/resources/Built-in-Qiskit-Backend-Methods.txt"
+    target_call_file_dir = "../resources/Built-in-Qiskit-Backend-Methods.txt"
     keyword_list = list()
     with open(target_call_file_dir, 'r') as f:
         for line in f:
