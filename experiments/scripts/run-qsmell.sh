@@ -7,7 +7,7 @@
 #
 # Usage:
 # run-qsmell.sh
-#   --matrix_file_path <path, e.g., ../../subjects/data/generated/quantum-circuit-as-matrix/ch02_01_random_bit.csv
+#   --input_file_path <path, e.g., ../../subjects/data/generated/quantum-circuit-as-matrix/ch02_01_random_bit.csv or ../../tools/oreilly-qc.github/samples/Qiskit/ch02_01_random_bit.py>
 #   --smell_metric <str, name of the smell metric to compute: CG, ROC, NC, LC, IM, IdQ, IQ, AQ, LPQ>
 #   --output_file_path <path>
 #   [help]
@@ -18,20 +18,20 @@ source "$SCRIPT_DIR/../../utils/scripts/utils.sh" || exit 1
 
 # ------------------------------------------------------------------------- Args
 
-USAGE="Usage: ${BASH_SOURCE[0]} --matrix_file_path <path, e.g., ../../subjects/data/generated/quantum-circuit-as-matrix/ch02_01_random_bit.csv --smell_metric <str, name of the smell metric to compute: CG, ROC, NC, LC, IM, IdQ, IQ, AQ, LPQ> --output_file_path <path> [help]"
+USAGE="Usage: ${BASH_SOURCE[0]} --input_file_path <path, e.g., ../../subjects/data/generated/quantum-circuit-as-matrix/ch02_01_random_bit.csv or ../../tools/oreilly-qc.github/samples/Qiskit/ch02_01_random_bit.py> --smell_metric <str, name of the smell metric to compute: CG, ROC, NC, LC, IM, IdQ, IQ, AQ, LPQ> --output_file_path <path> [help]"
 if [ "$#" -ne "1" ] && [ "$#" -ne "6" ]; then
   die "$USAGE"
 fi
 
-MATRIX_FILE_PATH=""
+INPUT_FILE_PATH=""
 SMELL_METRIC=""
 OUTPUT_FILE_PATH=""
 
 while [[ "$1" = --* ]]; do
   OPTION=$1; shift
   case $OPTION in
-    (--matrix_file_path)
-      MATRIX_FILE_PATH=$1;
+    (--input_file_path)
+      INPUT_FILE_PATH=$1;
       shift;;
     (--smell_metric)
       SMELL_METRIC=$1;
@@ -48,11 +48,11 @@ while [[ "$1" = --* ]]; do
 done
 
 # Check whether all arguments have been initialized
-[ "$MATRIX_FILE_PATH" != "" ] || die "[ERROR] Missing --matrix_file_path argument!"
+[ "$INPUT_FILE_PATH" != "" ] || die "[ERROR] Missing --input_file_path argument!"
 [ "$SMELL_METRIC" != "" ]     || die "[ERROR] Missing --smell_metric argument!"
 [ "$OUTPUT_FILE_PATH" != "" ] || die "[ERROR] Missing --output_file_path argument!"
 # Check whether input files exit and it is not empty
-[ -s "$MATRIX_FILE_PATH" ]    || die "[ERROR] $MATRIX_FILE_PATH does not exist or it is empty!"
+[ -s "$INPUT_FILE_PATH" ]    || die "[ERROR] $INPUT_FILE_PATH does not exist or it is empty!"
 if [ "$SMELL_METRIC" != "CG" ] && [ "$SMELL_METRIC" != "ROC" ] && [ "$SMELL_METRIC" != "NC" ] && [ "$SMELL_METRIC" != "LC" ] && [ "$SMELL_METRIC" != "IM" ] && [ "$SMELL_METRIC" != "IdQ" ] && [ "$SMELL_METRIC" != "IQ" ] && [ "$SMELL_METRIC" != "AQ" ] && [ "$SMELL_METRIC" != "LPQ" ]; then
   die "[ERROR] Unknown smell metric '$SMELL_METRIC'!"
 fi
@@ -68,11 +68,15 @@ _activate_virtual_environment
 
 python -m qsmell \
   --smell-metric "$SMELL_METRIC" \
-  --input-file "$MATRIX_FILE_PATH" \
-  --output-file "$OUTPUT_FILE_PATH" || die "[ERROR] Failed to execute QSmell on $MATRIX_FILE_PATH!"
+  --input-file "$INPUT_FILE_PATH" \
+  --output-file "$OUTPUT_FILE_PATH" || die "[ERROR] Failed to execute QSmell on $INPUT_FILE_PATH!"
 
 # Augment CSV file with runtime information
+<<<<<<< HEAD
 SUBJECT_NAME="$(basename $MATRIX_FILE_PATH | sed 's|.csv||')"
+=======
+SUBJECT_NAME="$(basename $INPUT_FILE_PATH | sed 's|.csv$||' | sed 's|.py$||')"
+>>>>>>> 05ba8d0 (Implemented and evaluated a new version of LPQ.)
 head -n1   "$OUTPUT_FILE_PATH" | sed 's|^|name,|' > "$OUTPUT_FILE_PATH.tmp"
 tail -n +2 "$OUTPUT_FILE_PATH" | sed "s|^|$SUBJECT_NAME,|g" >> "$OUTPUT_FILE_PATH.tmp"
 mv "$OUTPUT_FILE_PATH.tmp" "$OUTPUT_FILE_PATH"

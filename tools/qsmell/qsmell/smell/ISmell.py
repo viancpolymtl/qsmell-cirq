@@ -14,5 +14,8 @@ class ISmell:
     def compute_metric(self, df: pd.DataFrame, output_file_path: str) -> None:
         raise Exception('Not implemented')
 
+    def compute_metric(self, py_file_path: str, output_file_path: str) -> None:
+        raise Exception('Not implemented')
+
     def __str__(self) -> str:
         return self.name
