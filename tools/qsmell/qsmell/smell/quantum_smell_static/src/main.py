@@ -28,7 +28,7 @@ def main():
     result_csv_root_dir = sys.argv[2]
     create_folder_safely(result_csv_root_dir)
     title_list = ["Non-parameterized_circuit", "No-alignment_between_the_logical_and_physical_qubits"]
-    call_list = ['find_smell_221(my_parsed_object, call_order_line_list)', 'find_smell_236(call_order_line_list)']
+    call_list = ['find_smell_221(my_parsed_object, call_order_line_list)', 'find_smell_236(file_dir)']
     task_abbrev_list = ['NC', 'LPQ']
     for task_title, call, task_abbrev in zip(title_list, call_list, task_abbrev_list):
         result_csv_file_dir = result_csv_root_dir + task_abbrev + '_result.csv'
@@ -38,6 +38,7 @@ def main():
             for file_name in os.listdir(input_root_dir):
                 if not file_name.endswith(".py"):
                     continue
+                print("doing file = ", file_name)
                 file_dir = input_root_dir + file_name
                 my_parsed_object = parse_file(file_dir)
                 my_circuit_bit_object = parse_circuit_bit_info(my_parsed_object)
