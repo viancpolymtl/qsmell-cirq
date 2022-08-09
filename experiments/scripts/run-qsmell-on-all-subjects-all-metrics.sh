@@ -70,7 +70,7 @@ while read -r row; do
   [ -s "$matrix_file_path" ] || die "[ERROR] $matrix_file_path does not exist or it is empty!"
 
   # Quantum Smell that require a matrix
-  for smell_metric in "CG" "ROC" "NC" "LC" "IM" "IdQ" "IQ" "AQ"; do
+  for smell_metric in "CG" "ROC" "LC" "IM" "IdQ" "IQ" "AQ"; do
     output_file_path="$OUTPUT_DIR_PATH/$smell_metric/$name/data.csv"
     output_dir_path=$(echo "$output_file_path" | rev | cut -f2- -d'/' | rev)
     rm -rf "$output_dir_path"; mkdir -p "$output_dir_path"
@@ -82,7 +82,7 @@ while read -r row; do
   done
 
   # Quantum Smell that require source code
-  for smell_metric in "LPQ"; do
+  for smell_metric in "NC"; do
     output_file_path="$OUTPUT_DIR_PATH/$smell_metric/$name/data.csv"
     output_dir_path=$(echo "$output_file_path" | rev | cut -f2- -d'/' | rev)
     rm -rf "$output_dir_path"; mkdir -p "$output_dir_path"
