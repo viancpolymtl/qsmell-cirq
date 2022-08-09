@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch06_01_grover_iterations,LPQ,1
+=======
+ch06_01_grover_iterations,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

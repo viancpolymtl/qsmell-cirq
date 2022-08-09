@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch05_02_quantum_add,LPQ,1
+=======
+ch05_02_quantum_add,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

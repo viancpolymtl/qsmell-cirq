@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch07_03_qft_sq_wave,LPQ,1
+=======
+ch07_03_qft_sq_wave,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

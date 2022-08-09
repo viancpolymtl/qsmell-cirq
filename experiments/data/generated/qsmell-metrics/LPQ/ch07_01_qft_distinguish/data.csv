@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch07_01_qft_distinguish,LPQ,1
+=======
+ch07_01_qft_distinguish,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

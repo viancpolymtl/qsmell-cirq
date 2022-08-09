@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch05_04_conditional_execution,LPQ,1
+=======
+ch05_04_conditional_execution,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch07_07_qft_freq_manip,LPQ,1
+=======
+ch07_07_qft_freq_manip,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch02_03_root_not,LPQ,1
+=======
+ch02_03_root_not,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

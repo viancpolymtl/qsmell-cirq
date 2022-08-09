@@ -82,7 +82,7 @@ while read -r row; do
   done
 
   # Quantum Smell that require source code
-  for smell_metric in "NC"; do
+  for smell_metric in "NC" "LPQ"; do
     output_file_path="$OUTPUT_DIR_PATH/$smell_metric/$name/data.csv"
     output_dir_path=$(echo "$output_file_path" | rev | cut -f2- -d'/' | rev)
     rm -rf "$output_dir_path"; mkdir -p "$output_dir_path"

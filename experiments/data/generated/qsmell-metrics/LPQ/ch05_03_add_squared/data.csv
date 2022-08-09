@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch05_03_add_squared,LPQ,1
+=======
+ch05_03_add_squared,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch05_06_cnot_logic,LPQ,1
+=======
+ch05_06_cnot_logic,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

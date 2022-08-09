@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch03_02_entangled_qubits,LPQ,1
+=======
+ch03_02_entangled_qubits,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

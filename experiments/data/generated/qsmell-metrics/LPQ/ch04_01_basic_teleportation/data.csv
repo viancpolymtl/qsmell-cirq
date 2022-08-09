@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch04_01_basic_teleportation,LPQ,1
+=======
+ch04_01_basic_teleportation,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

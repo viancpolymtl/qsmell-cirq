@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch02_04_spy_hunter,LPQ,1
+=======
+ch02_04_spy_hunter,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

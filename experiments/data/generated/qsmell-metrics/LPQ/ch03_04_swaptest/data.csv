@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch03_04_swaptest,LPQ,1
+=======
+ch03_04_swaptest,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

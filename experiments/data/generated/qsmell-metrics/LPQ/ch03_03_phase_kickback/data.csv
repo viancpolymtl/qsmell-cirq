@@ -1,2 +1,6 @@
 name,metric,value
+<<<<<<< HEAD
 ch03_03_phase_kickback,LPQ,1
+=======
+ch03_03_phase_kickback,LPQ,0
+>>>>>>> 7ca91fc ((Re-)Implemented LPQ.)
