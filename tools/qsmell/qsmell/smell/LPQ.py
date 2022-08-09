@@ -58,7 +58,7 @@ class LPQ(ISmell):
                         if attr == 'transpile' and len(args) >= 1:
                             if __is_initial_layout_used(keyws) == False:
                                 print('  Found a expression call to transpile at line %d' %(node.lineno))
-                                num_transpiles_without_initial_layout = 1 if np.isnan(num_transpiles_without_initial_layout) else num_transpiles_without_initial_layout + 1
+                                num_transpiles_without_initial_layout += 1
 
         metrics = {
             'metric': self._name,
