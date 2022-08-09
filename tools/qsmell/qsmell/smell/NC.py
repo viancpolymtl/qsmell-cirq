@@ -36,7 +36,6 @@ class NC(ISmell):
                 if isinstance(func, ast.Name):
                     id = func.id
                     if id == 'execute' and len(args) >= 2:
-                        print(ast.dump(node)) # debug
                         print('  Found a function call at line %d' %(node.lineno))
                         num_executions += 1
                         if node.lineno in loops_lines: # Is the call to the execute method within a loop?
