@@ -29,6 +29,7 @@ class NC(ISmell):
 
             if isinstance(node, ast.Call):
                 # Call(func=Name(id='execute', ctx=Load()), args=[Name(id='qc', ctx=Load()), Name(id='backend', ctx=Load())], keywords=[])
+                # Call(func=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='_quantum_instance', ctx=Load()), attr='execute', ctx=Load()), args=[Name(id='circuit', ctx=Load())], keywords=[])
                 func = node.func
                 args = node.args
 
@@ -40,6 +41,15 @@ class NC(ISmell):
                         num_executions += 1
                         if node.lineno in loops_lines: # Is the call to the execute method within a loop?
                             num_executions += 1 # This assumes lines in a loop are executed at least twice
+                elif isinstance(func, ast.Attribute):
+                    # Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='_quantum_instance', ctx=Load()), attr='execute', ctx=Load())
+                    attr = func.attr
+                    if attr == 'execute' and len(args) >= 1:
+                        print('  Found a method call call at line %d' %(node.lineno))
+                        num_executions += 1
+                        if node.lineno in loops_lines:
+                            num_executions += 1 # This assumes lines in a line are at least executed twice
+
             elif isinstance(node, ast.Expr):
                 # Expr(value=Call(func=Attribute(value=Name(id='backend', ctx=Load()), attr='run', ctx=Load()), args=[Name(id='qc', ctx=Load())], keywords=[]))
                 value = node.value
