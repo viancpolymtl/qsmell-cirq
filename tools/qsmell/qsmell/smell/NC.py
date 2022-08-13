@@ -23,7 +23,6 @@ class NC(ISmell):
                 loops_lines.extend(range(loop_start, loop_end+1))
 
         num_executions = 0
-
         for node in ast.walk(tree):
             print(ast.dump(node)) # debug
 
@@ -65,9 +64,36 @@ class NC(ISmell):
                             if node.lineno in loops_lines: # Is the call to the run method within a loop?
                                 num_executions += 1 # This assumes lines in a loop are executed at least twice
 
+        num_bind_parameters = 0
+        for node in ast.walk(tree):
+            print(ast.dump(node)) # debug
+
+            if isinstance(node, ast.Call):
+                if isinstance(node, ast.Expr):
+                    # Expr(value=Call(func=Attribute(value=Name(id='qc', ctx=Load()), attr='bind_parameters', ctx=Load()), args=..., keywords=[]))
+                    value = node.value
+
+                    if isinstance(value, ast.Call):
+                        func = value.func
+                        args = value.args
+
+                        if isinstance(func, ast.Attribute):
+                            attr = func.attr
+                            if attr == 'bind_parameters' and len(args) >= 1:
+                                print('  Found a expression call at line %d' %(node.lineno))
+                                num_bind_parameters += 1
+
+        value = 0
+        # if num_executions == num_bind_parameters:
+        #    value = 0
+        # elif num_executions < num_bind_parameters:
+        #    value = 0
+        if num_executions > num_bind_parameters:
+            value = num_executions - num_bind_parameters
+
         metrics = {
             'metric': self._name,
-            'value': num_executions
+            'value': value
         }
 
         out_df = pd.DataFrame.from_dict([metrics])
