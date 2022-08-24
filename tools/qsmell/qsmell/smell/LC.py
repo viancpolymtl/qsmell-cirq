@@ -10,6 +10,9 @@ class LC(ISmell):
         super().__init__("LC")
 
     def compute_metric(self, df: pd.DataFrame, output_file_path: str) -> None:
+        # Drop classical bits from the dataframe
+        df = super().__drop_classical_bits__(df)
+
         qubits = [bit for bit in df.index if bit.startswith('q-')]
         stamps = df.columns
 
@@ -20,7 +23,7 @@ class LC(ISmell):
 
         max_num_ops_in_parallel = 0
         for stamp in stamps:
-            column = df[stamp]
+            column = df[stamp].tolist()
             max_num_ops_in_parallel = max(max_num_ops_in_parallel, len([op for op in column if op != '' and not op.lower().startswith('barrier')]))
 
         metrics = {
