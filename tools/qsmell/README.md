@@ -1,6 +1,6 @@
 # QSmell
 
-QSmell is a tool for detecting quantum-based code smells in programs written in the [Qiskit framework](https://qiskit.org).  As Qiskit v0.37.0 requires Python version >= v3.7.8, QSmell requires Python v3.7.8 as well.
+QSmell is a tool for detecting quantum-based code smells in programs written in the [Qiskit framework](https://qiskit.org).  As Qiskit v0.37.0 requires Python version >= v3.7.8, QSmell also requires Python v3.7.8.
 
 ## Workflow
 
@@ -64,7 +64,7 @@ As the information of the quantum backend (see lines 14-16 of the running exampl
 Installing and using QSmell is simple and straightforward.  First, one should get its latest version from [pip](https://pypi.org).
 
 ```
-pip install qsmell # Not yet deployed for anonymity
+pip install qsmell # Not yet deployed
 ```
 
 or from the tool's repository:
@@ -136,3 +136,14 @@ qsmell \
   --input-file INPUT_FILE, -i INPUT_FILE Quantum program/circuit to analyse
   --output-file OUTPUT_FILE, -o OUTPUT_FILE Output file
 ```
+
+## Publications
+
+- "The Smelly Eight: An Empirical Study on the Prevalence of Code Smells in Quantum Computing"
+  Qihong Chen, Rúben Câmara, José Campos, and Iftekhar Ahmed, ICSE 2023.
+
+[More publications](https://scholar.google.com/scholar?q=qsmell)
+
+## License
+
+MIT License, see [`LICENSE.md`](LICENSE.md) for more information.
