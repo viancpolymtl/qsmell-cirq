@@ -70,7 +70,7 @@ pip install qsmell # Not yet deployed
 or from the tool's repository:
 
 ```
-git clone <URL redacted for anonymity>
+git clone https://github.com/jose/qsmell
 ```
 
 and compile/install QSmell from it's source code
