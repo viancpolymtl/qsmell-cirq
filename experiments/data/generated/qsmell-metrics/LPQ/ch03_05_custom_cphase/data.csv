@@ -1,6 +1,0 @@
-name,metric,value
-<<<<<<< HEAD
-ch03_05_custom_cphase,LPQ,1
-=======
-ch03_05_custom_cphase,LPQ,0
->>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

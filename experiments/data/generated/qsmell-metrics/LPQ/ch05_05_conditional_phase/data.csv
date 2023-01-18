@@ -1,6 +1,0 @@
-name,metric,value
-<<<<<<< HEAD
-ch05_05_conditional_phase,LPQ,1
-=======
-ch05_05_conditional_phase,LPQ,0
->>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

@@ -1,6 +1,0 @@
-name,metric,value
-<<<<<<< HEAD
-ch06_02_grover_freq,LPQ,1
-=======
-ch06_02_grover_freq,LPQ,0
->>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

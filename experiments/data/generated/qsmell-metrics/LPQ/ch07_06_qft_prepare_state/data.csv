@@ -1,6 +1,0 @@
-name,metric,value
-<<<<<<< HEAD
-ch07_06_qft_prepare_state,LPQ,1
-=======
-ch07_06_qft_prepare_state,LPQ,0
->>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

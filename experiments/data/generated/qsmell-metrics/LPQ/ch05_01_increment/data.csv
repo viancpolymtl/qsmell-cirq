@@ -1,6 +1,0 @@
-name,metric,value
-<<<<<<< HEAD
-ch05_01_increment,LPQ,1
-=======
-ch05_01_increment,LPQ,0
->>>>>>> 7ca91fc ((Re-)Implemented LPQ.)

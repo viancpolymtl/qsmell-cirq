@@ -1,6 +1,0 @@
-name,metric,value
-<<<<<<< HEAD
-ch03_06_remote_random,LPQ,1
-=======
-ch03_06_remote_random,LPQ,0
->>>>>>> 7ca91fc ((Re-)Implemented LPQ.)
