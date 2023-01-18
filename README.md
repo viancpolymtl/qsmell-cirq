@@ -142,7 +142,7 @@ qsmell \
 - "The Smelly Eight: An Empirical Study on the Prevalence of Code Smells in Quantum Computing"
   Qihong Chen, Rúben Câmara, José Campos, and Iftekhar Ahmed, ICSE 2023.
 
-[More publications](https://scholar.google.com/scholar?q=qsmell)
+[More publications](https://scholar.google.com/scholar?lr=lang_en&q=%22qsmell%22&hl=en)
 
 ## License
 
