@@ -40,7 +40,7 @@ from quantum_circuit_to_matrix import qc2matrix
 qc2matrix(qc, output_file_path='example-matrix.csv')
 ```
 
-adapt it, in case, e.g., the quantum circuit may not be named `qc`, and run it to generate the **execution matrix**.  Note that the `quantum_circuit_to_matrix` module was built by us on top of Qiskit's API and is part of the QSmell distribution.
+adapt it, in case, e.g., the quantum circuit may not be named `qc`, and run it to generate the **execution matrix**.  Note that the [`quantum_circuit_to_matrix`](qsmell/utils/quantum_circuit_to_matrix.py) module was built by us on top of Qiskit's API and is part of the QSmell distribution.
 
 For this running example the **execution matrix** is
 
