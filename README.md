@@ -2,6 +2,37 @@
 
 QSmell is a tool for detecting quantum-based code smells in programs written in the [Qiskit framework](https://qiskit.org).  As Qiskit v0.37.0 requires Python version >= v3.7.8, QSmell also requires Python v3.7.8.
 
+If you use this tool for academic purposes, please cite it as
+
+```Bibtex
+@misc{QSmellV001,
+  author = {Chen, Qihong and Câmara, Rúben and Campos, José and Souto, André and Ahmed, Iftekhar},
+  title = {{QSmell v0.0.1}},
+  year = {2023},
+  publisher = {GitHub},
+  url = {https://github.com/jose/qsmell}
+}
+```
+
+in case you only want to cite the associated paper, please cite it as
+
+```Bibtex
+@inproceedings{ChenQSmell2023,
+  author = {Chen, Qihong and Câmara, Rúben and Campos, José and Souto, André and Ahmed, Iftekhar},
+  booktitle = {2023 IEEE/ACM 45th International Conference on Software Engineering (ICSE)},
+  title = {{The Smelly Eight: An Empirical Study on the Prevalence of Code Smells in Quantum Computing}},
+  year = {2023},
+  volume = {},
+  number = {},
+  pages = {},
+  keywords = {},
+  doi = {},
+  url = {},
+  ISSN = {},
+  month = {May},
+}
+```
+
 ## Workflow
 
 Depending on the smell metric, QSmell either performs a dynamic or static analysis.
