@@ -35,13 +35,13 @@ in case you only want to cite the associated paper, please cite it as
 
 ## Workflow
 
-Depending on the smell metric, QSmell either performs a dynamic or static analysis.
+Depending on the smell metric, QSmell either performs a dynamic or a static analysis.
 
-The smell metrics CG, ROC, LC, IM, IdQ, and IQ that rely on an accurate data as the set of qubits and/or the set of operations performed in the circuit, are computed using a dynamic analysis.  The other smell metrics, NC and LPQ, which do not rely on the quantum circuit but the actions performed on the quantum circuit, are computed using a static analysis.  The latter does not handle common code as loops or to track objects passed as arguments to other functions, thus it is possible evaluate it with a static analysis.  The former does not handle calls to methods that are not part of a quantum circuit object (e.g., `transpile`, Qiskit backends' methods), thus it is necessary to analyse it dynamically.
+The smell metrics CG, ROC, LC, IM, IdQ, and IQ, which rely on accurate data as the set of qubits and/or the set of operations performed in the circuit, are computed using dynamic analysis.  The other smell metrics, NC and LPQ, which do not rely on the quantum circuit but on the actions performed on the quantum circuit, are computed using static analysis.  The latter does not handle common code as loops or track objects passed as arguments to other functions. Thus it is possible to evaluate it with static analysis.  The former does not handle calls to methods that are not part of a quantum circuit object (e.g., `transpile`, Qiskit backends' methods), thus, it is necessary to analyze it dynamically.
 
 ### Dynamic Analysis
 
-To perform a dynamic analysis on a quantum program, QSmell takes as input an **execution matrix**, whereas each row represents a quantum or classical bit, each column represents a timestamp in the circuit, and each cell represents a quantum operation performed in the circuit.
+To perform a dynamic analysis on a quantum program, QSmell takes as input an **execution matrix**, where each row represents a quantum or classical bit, each column represents a timestamp in the circuit, and each cell represents a quantum operation performed in the circuit.
 
 Given the following running example (`example.py`)
 
@@ -73,7 +73,7 @@ qc2matrix(qc, output_file_path='example-matrix.csv')
 
 adapt it, in case, e.g., the quantum circuit may not be named `qc`, and run it to generate the **execution matrix**.  Note that the [`quantum_circuit_to_matrix`](qsmell/utils/quantum_circuit_to_matrix.py) module was built by us on top of Qiskit's API and is part of the QSmell distribution.
 
-For this running example the **execution matrix** is
+For this running example, the **execution matrix** is
 
 ```
              1 &   2 &   3
@@ -82,13 +82,13 @@ q-reg-1} & x() & x() & y()
 q-reg-2} & x() & x() &    
 ```
 
-This manual step could not, at the time of writing this document, be automatized as different programs could be coded differently.  For example, although `qc` is a standard name of the variable that holds a `QuantumCircuit` object, it might have been namely differently or it might be under a method of the program itself.  For example, to get the `QuantumCircuit` object of the [`vqd` program](https://github.com/Qiskit/qiskit-terra/blob/0.21.0/qiskit/algorithms/eigen_solvers/vqd.py), one would have to invoke the [`construct_circuit` method](https://github.com/Qiskit/qiskit-terra/blob/0.21.0/qiskit/algorithms/eigen_solvers/vqd.py#L408) of the `vqd` class to retrieve its `QuantumCircuit` object.
+This manual step could not be automatized at the time of writing this document as different programs could be coded differently.  For example, although `qc` is a standard variable name that holds a `QuantumCircuit` object, it might have been named differently, or it might be under a method of the program itself.  For example, to get the `QuantumCircuit` object of the [`vqd` program](https://github.com/Qiskit/qiskit-terra/blob/0.21.0/qiskit/algorithms/eigen_solvers/vqd.py), one would have to invoke the [`construct_circuit` method](https://github.com/Qiskit/qiskit-terra/blob/0.21.0/qiskit/algorithms/eigen_solvers/vqd.py#L408) of the `vqd` class to retrieve its `QuantumCircuit` object.
 
-Once the **execution matrix** has been generated, to compute, e.g., the LC smell metric, QSmell first computes the maximum number of operations in any qubit (any row in the matrix).   In above example, such maximum is three in qubit `q-reg-0`, for example.  It then performs a similar procedure to compute the maximum number of operations that are performed simultaneous (i.e., in the same timestamp/column).  The maximum number of operations (i.e., three) are performed in the first and second column.  Finally, the LC metric is (1 - 0.03512)^{3 * 3} = 0.725.
+Once the **execution matrix** has been generated to compute, e.g., the LC smell metric, QSmell first computes the maximum number of operations in any qubit (any row in the matrix).   In the above example, such maximum is three in qubit `q-reg-0`, for example.  It then performs a similar procedure to compute the maximum number of operations performed simultaneously (i.e., in the same timestamp/column).  The maximum number of operations (i.e., three) are performed in the first and second columns.  Finally, the LC metric is (1 - 0.03512)^{3 * 3} = 0.725.
 
 ### Static Analysis
 
-As the information of the quantum backend (see lines 14-16 of the running example) is not kept in the quantum circuit object itself, QSmell performs a static analysis for smell metrics NC and LPQ.  It takes a source code `.py` file and analysis it using [Python AST](https://docs.python.org/3.7/library/ast.html).  To compute the LPQ smell metric for the running example, QSmell first finds all calls to the `transpile` method in the program's under analysis AST and then counts how many do not define the `initial_layout` parameter.
+As the information of the quantum backend (see lines 14-16 of the running example) is not kept in the quantum circuit object itself, QSmell performs a static analysis for smell metrics NC and LPQ.  It takes a source code `.py` file and analysis it using [Python AST](https://docs.python.org/3.7/library/ast.html).  To compute the LPQ smell metric for the running example, QSmell first finds all calls to the `transpile` method in the program's under analyzis AST and then counts how many do not define the `initial_layout` parameter.
 
 ## Installation
 
@@ -149,7 +149,7 @@ metric,value
 ROC,2
 ```
 
-To perform static analysis, or in other words, to compute the NC or LQP smell metrics one could invoke QSmell on the source code under analysis as:
+To perform static analysis, or in other words, to compute the NC or LQP smell metrics, one could invoke QSmell on the source code under analysis as:
 
 ```
 qsmell \
