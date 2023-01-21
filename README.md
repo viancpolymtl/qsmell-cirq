@@ -88,7 +88,7 @@ Once the **execution matrix** has been generated to compute, e.g., the LC smell 
 
 ### Static Analysis
 
-As the information of the quantum backend (see lines 14-16 of the running example) is not kept in the quantum circuit object itself, QSmell performs a static analysis for smell metrics NC and LPQ.  It takes a source code `.py` file and analysis it using [Python AST](https://docs.python.org/3.7/library/ast.html).  To compute the LPQ smell metric for the running example, QSmell first finds all calls to the `transpile` method in the program's under analyzis AST and then counts how many do not define the `initial_layout` parameter.
+As the information of the quantum backend (see lines 14-16 of the running example) is not kept in the quantum circuit object itself, QSmell performs a static analysis for smell metrics NC and LPQ.  It takes a source code `.py` file and analysis it using [Python AST](https://docs.python.org/3.7/library/ast.html).  To compute the LPQ smell metric for the running example, QSmell first finds all calls to the `transpile` method in the program's under analysis AST and then counts how many do not define the `initial_layout` parameter.
 
 ## Installation
 
