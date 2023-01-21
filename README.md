@@ -104,7 +104,13 @@ or from the tool's repository:
 git clone https://github.com/jose/qsmell
 ```
 
-and compile/install QSmell from it's source code
+and install QSmell's dependencies
+
+```
+pip install -r requirements.txt
+```
+
+and finally compile/install QSmell from it's source code
 
 ```
 python3 setup.py install
