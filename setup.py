@@ -24,7 +24,8 @@ setup(
     name='QSmell',
     version=version["__version__"],
     python_requires='>=3.0',
-    description='QSmell is a tool for detecting quantum-based code smells in programs written in the Qiskit framework.',
+    description='QSmell is a tool for detecting quantum-based code smells in programs written in the Qiskit framework,' \
+    'but we changed it to work for cirq programs',
     long_description=long_description,
     author='<retracted>',
     author_email='<retracted>',

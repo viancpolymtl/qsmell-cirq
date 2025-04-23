@@ -1,7 +1,8 @@
-""" Initialization of qubits differently from |0⟩ (IQ) """
+""" Initial qubit state (IQ) """
 
 import sys
 import pandas as pd
+import cirq
 from .ISmell import *
 
 class IQ(ISmell):
@@ -9,38 +10,31 @@ class IQ(ISmell):
     def __init__(self):
         super().__init__("IQ")
 
-    def compute_metric(self, df: pd.DataFrame, output_file_path: str) -> None:
-        qubits = [bit for bit in df.index if bit.startswith('q-')]
-        stamps = df.columns
-
+    def compute_metric(self, circuit_or_df: cirq.Circuit | pd.DataFrame, output_file_path: str) -> None:
         metrics = {
             'metric': self._name,
             'value': 0
         }
 
-        for qubit in qubits:
-            max_num_ops_between_init_and_use = 0
-            count = -1
-            for stamp in stamps:
-                op = df.loc[qubit][stamp]
-                if op.lower().startswith('barrier'): # Ignore barriers
-                    continue
+        if isinstance(circuit_or_df, cirq.Circuit):
+            if circuit_or_df.moments:  # Vérifier si la liste des moments n'est pas vide
+                first_moment = circuit_or_df.moments[0]
+                for op in first_moment.operations:
+                    if not isinstance(op.gate, cirq.IdentityGate):
+                        metrics['value'] += 1
 
-                if op == '' and count == -1:
-                    # The first operation on qubit has not been found yet
-                    pass
-                elif op != '' and count == -1:
-                    # Found the first operation on qubit
-                    count = 0
-                elif op != '' and count != -1:
-                    # Found the second operation on qubit
-                    max_num_ops_between_init_and_use = max(max_num_ops_between_init_and_use, count)
+        elif isinstance(circuit_or_df, pd.DataFrame):
+            qubits = [bit for bit in circuit_or_df.index if bit.startswith('q-')]
+            for qubit in qubits:
+                row = circuit_or_df.loc[qubit]
+                for op in row:
+                    if op == '':
+                        continue
+                    if op.lower().startswith('barrier'):
+                        continue
+                    if not op.lower().startswith('i'):
+                        metrics['value'] += 1
                     break
-                elif op == '' and count != -1:
-                    # Empty operation in between
-                    count += 1
-
-            metrics['value'] = max(metrics['value'], max_num_ops_between_init_and_use)
 
         out_df = pd.DataFrame.from_dict([metrics])
         sys.stdout.write(str(out_df) + '\n')

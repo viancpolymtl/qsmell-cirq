@@ -1,6 +1,7 @@
 """ Smell interface. """
 
 import pandas as pd
+import cirq
 
 class ISmell:
 
@@ -17,18 +18,15 @@ class ISmell:
             if len(column_content) == 0:
                 print('[DEBUG] removing column %s' %(column_id))
                 df.drop(column_id, axis=1, inplace=True)
-        return(df)
+        return df
 
     def __drop_classical_bits__(self, df: pd.DataFrame) -> pd.DataFrame:
         clbits = [bit for bit in df.index if bit.startswith('c-')]
         for clbit in clbits:
             df.drop(clbit, axis=0, inplace=True)
-        return(df)
+        return df
 
-    def compute_metric(self, df: pd.DataFrame, output_file_path: str) -> None:
-        raise Exception('Not implemented')
-
-    def compute_metric(self, py_file_path: str, output_file_path: str) -> None:
+    def compute_metric(self, circuit_or_df: cirq.Circuit | pd.DataFrame, output_file_path: str) -> None:
         raise Exception('Not implemented')
 
     def __str__(self) -> str:
