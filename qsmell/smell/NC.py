@@ -3,6 +3,7 @@
 import sys
 import ast
 import pandas as pd
+import cirq
 from .ISmell import *
 
 class NC(ISmell):
@@ -10,86 +11,68 @@ class NC(ISmell):
     def __init__(self):
         super().__init__("NC")
 
-    def compute_metric(self, tree: ast.Module, output_file_path: str) -> None:
-        # Are there any loops in the program?  If so, where are they?
+    def compute_metric(self, circuit_or_df: cirq.Circuit | pd.DataFrame, output_file_path: str) -> None:
+        metrics = {
+            'metric': self._name,
+            'value': 0
+        }
+
+        if isinstance(circuit_or_df, cirq.Circuit):
+            # Vérifier si le circuit utilise des paramètres
+            has_params = any(
+                isinstance(p, (sympy.Symbol, cirq.ParameterizedValue))
+                for op in circuit_or_df.all_operations()
+                for p in getattr(op.gate, 'parameters', [])
+            )
+            metrics['value'] = 0 if has_params else 1
+
+        elif isinstance(circuit_or_df, pd.DataFrame):
+            metrics['value'] = 1  # Par défaut, assume non paramétrisé pour DataFrame
+
+        out_df = pd.DataFrame.from_dict([metrics])
+        sys.stdout.write(str(out_df) + '\n')
+        out_df.to_csv(output_file_path, header=True, index=False, mode='w')
+
+    def compute_metric_ast(self, tree: ast.Module, output_file_path: str) -> None:
         loops_lines = []
         for node in ast.walk(tree):
             if isinstance(node, ast.For) or isinstance(node, ast.While):
                 loop_start = node.lineno
-                # Body attribute is a list of nodes, one for each line in the loop
-                # the lineno of the last node gives the ending line
                 loop_end = node.body[-1].lineno
-                # Keep track of all lines between starting and ending lines for current loop
-                loops_lines.extend(range(loop_start, loop_end+1))
+                loops_lines.extend(range(loop_start, loop_end + 1))
 
         num_executions = 0
         for node in ast.walk(tree):
-            print(ast.dump(node)) # debug
-
             if isinstance(node, ast.Call):
-                # Call(func=Name(id='execute', ctx=Load()), args=[Name(id='qc', ctx=Load()), Name(id='backend', ctx=Load())], keywords=[])
-                # Call(func=Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='_quantum_instance', ctx=Load()), attr='execute', ctx=Load()), args=[Name(id='circuit', ctx=Load())], keywords=[])
                 func = node.func
-                args = node.args
-
-                if isinstance(func, ast.Name):
-                    id = func.id
-                    if id == 'execute' and len(args) >= 2:
-                        print('  Found a function call at line %d' %(node.lineno))
-                        num_executions += 1
-                        if node.lineno in loops_lines: # Is the call to the execute method within a loop?
-                            num_executions += 1 # This assumes lines in a loop are executed at least twice
-                elif isinstance(func, ast.Attribute):
-                    # Attribute(value=Attribute(value=Name(id='self', ctx=Load()), attr='_quantum_instance', ctx=Load()), attr='execute', ctx=Load())
-                    attr = func.attr
-                    if attr == 'execute' and len(args) >= 1:
-                        print('  Found a method call call at line %d' %(node.lineno))
+                if isinstance(func, ast.Attribute):
+                    if func.attr == 'run' and isinstance(func.value, ast.Name) and func.value.id == 'cirq':
+                        print(f'  Found a run call at line {node.lineno}')
                         num_executions += 1
                         if node.lineno in loops_lines:
-                            num_executions += 1 # This assumes lines in a line are at least executed twice
+                            num_executions += 1  # Suppose exécution multiple dans une boucle
 
             elif isinstance(node, ast.Expr):
-                # Expr(value=Call(func=Attribute(value=Name(id='backend', ctx=Load()), attr='run', ctx=Load()), args=[Name(id='qc', ctx=Load())], keywords=[]))
                 value = node.value
-
                 if isinstance(value, ast.Call):
                     func = value.func
-                    args = value.args
-
                     if isinstance(func, ast.Attribute):
-                        attr = func.attr
-                        if attr == 'run' and len(args) >= 1:
-                            print('  Found a expression call at line %d' %(node.lineno))
+                        if func.attr == 'run' and isinstance(func.value, ast.Name) and func.value.id == 'cirq':
+                            print(f'  Found an expression run call at line {node.lineno}')
                             num_executions += 1
-                            if node.lineno in loops_lines: # Is the call to the run method within a loop?
-                                num_executions += 1 # This assumes lines in a loop are executed at least twice
+                            if node.lineno in loops_lines:
+                                num_executions += 1
 
         num_bind_parameters = 0
         for node in ast.walk(tree):
-            print(ast.dump(node)) # debug
-
             if isinstance(node, ast.Call):
-                if isinstance(node, ast.Expr):
-                    # Expr(value=Call(func=Attribute(value=Name(id='qc', ctx=Load()), attr='bind_parameters', ctx=Load()), args=..., keywords=[]))
-                    value = node.value
+                func = node.func
+                if isinstance(func, ast.Attribute):
+                    if func.attr == 'with_parameters' and isinstance(func.value, ast.Name) and func.value.id == 'circuit':
+                        print(f'  Found a parameter binding at line {node.lineno}')
+                        num_bind_parameters += 1
 
-                    if isinstance(value, ast.Call):
-                        func = value.func
-                        args = value.args
-
-                        if isinstance(func, ast.Attribute):
-                            attr = func.attr
-                            if attr == 'bind_parameters' and len(args) >= 1:
-                                print('  Found a expression call at line %d' %(node.lineno))
-                                num_bind_parameters += 1
-
-        value = 0
-        # if num_executions == num_bind_parameters:
-        #    value = 0
-        # elif num_executions < num_bind_parameters:
-        #    value = 0
-        if num_executions > num_bind_parameters:
-            value = num_executions - num_bind_parameters
+        value = max(0, num_executions - num_bind_parameters)
 
         metrics = {
             'metric': self._name,

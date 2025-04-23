@@ -2,6 +2,7 @@
 
 import sys
 import pandas as pd
+import cirq
 from .ISmell import *
 
 class IdQ(ISmell):
@@ -9,38 +10,28 @@ class IdQ(ISmell):
     def __init__(self):
         super().__init__("IdQ")
 
-    def compute_metric(self, df: pd.DataFrame, output_file_path: str) -> None:
-        qubits = [bit for bit in df.index if bit.startswith('q-')]
-        stamps = df.columns
-
+    def compute_metric(self, circuit_or_df: cirq.Circuit | pd.DataFrame, output_file_path: str) -> None:
         metrics = {
             'metric': self._name,
             'value': 0
         }
 
-        for qubit in qubits:
-            max_num_ops_in_between = 0
-            count = -1
-            for stamp in stamps:
-                op = df.loc[qubit][stamp]
-                if op.lower().startswith('barrier'): # Ignore barriers
-                    continue
+        if isinstance(circuit_or_df, cirq.Circuit):
+            if circuit_or_df.moments:
+                first_moment = circuit_or_df.moments[0]
+                active_qubits = {q for op in first_moment.operations for q in op.qubits}
+                all_qubits = circuit_or_df.all_qubits()
+                for qubit in all_qubits:
+                    if qubit not in active_qubits:
+                        metrics['value'] += 1
 
-                if op == '' and count == -1:
-                    # The first operation on qubit has not been found yet
-                    pass
-                elif op != '' and count == -1:
-                    # Found the first operation on qubit
-                    count = 0
-                elif op != '' and count != -1:
-                    # Found the second, or third, ... operation on qubit
-                    max_num_ops_in_between = max(max_num_ops_in_between, count)
-                    count = 0 # Reset counter
-                elif op == '' and count != -1:
-                    # Empty operation in between
-                    count += 1
-
-            metrics['value'] = max(metrics['value'], max_num_ops_in_between)
+        elif isinstance(circuit_or_df, pd.DataFrame):
+            qubits = [bit for bit in circuit_or_df.index if bit.startswith('q-')]
+            for qubit in qubits:
+                row = circuit_or_df.loc[qubit]
+                first_op_idx = next((i for i, op in enumerate(row) if op), len(row))
+                if first_op_idx > 0:
+                    metrics['value'] += 1
 
         out_df = pd.DataFrame.from_dict([metrics])
         sys.stdout.write(str(out_df) + '\n')

@@ -2,6 +2,7 @@
 
 import ast
 import pandas as pd
+import cirq
 from qsmell.smell import SmellType
 
 class QSmell:
@@ -19,10 +20,18 @@ class QSmell:
     """
     def run(self, smell: SmellType, input_file_path: str, output_file_path: str) -> None:
         if input_file_path.endswith('.py'):
-            f = open(input_file_path, 'r')
-            tree = ast.parse(f.read())
-            f.close()
-            smell.compute_metric(tree, output_file_path)
+            with open(input_file_path, 'r') as f:
+                code = f.read()
+            tree = ast.parse(code)
+            local_vars = {}
+            exec(code, {'cirq': cirq}, local_vars)
+            circuits = [obj for obj in local_vars.values() if isinstance(obj, cirq.Circuit)]
+            if not circuits:
+                raise Exception("No cirq.Circuit found in the input file!")
+            if smell.name in ['LPQ', 'NC']:
+                smell.compute_metric_ast(tree, output_file_path)
+            else:
+                smell.compute_metric(circuits[0], output_file_path)
         elif input_file_path.endswith('.csv'):
             df = pd.read_csv(input_file_path, sep=';', index_col=0, keep_default_na=False)
             smell.compute_metric(df, output_file_path)
