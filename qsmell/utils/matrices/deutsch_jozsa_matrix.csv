@@ -1,0 +1,5 @@
+;1;2;3;4;5;6
+q-q(0);H();;CNOT();H();;measure()
+q-q(1);H();;;CNOT();H();measure()
+q-q(2);H();H();;;;measure()
+q-q(3);_PauliX();H();CNOT();CNOT();;

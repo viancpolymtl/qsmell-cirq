@@ -1,0 +1,16 @@
+Program,CG,IM,IQ,IdQ,LC,LPQ,NC,ROC,AQ
+basic_arithmetic,8,0,3,6,24,1,0,0,0
+bb84,0,0,2,1,4,1,0,0,0
+bernstein_vazirani,0,0,9,8,18,1,0,0,0
+deutsch_jozsa,0,0,4,3,16,1,0,0,1
+grover,1,0,3,2,33,1,0,0,0
+hhl,3,0,4,3,16,1,0,0,0
+hidden_shift_algorithm,0,0,4,3,28,1,0,0,0
+phase_estimator,5,0,4,4,16,1,0,0,0
+qaoa,4,0,4,3,16,1,0,0,2
+quantum_fourier_transform,0,0,1,3,20,1,0,0,2
+quantum_teleportation,0,0,2,2,8,1,0,0,1
+qubit_characterizations_example,0,0,1,1,2,1,0,0,0
+shor,1,0,12,11,24,1,0,0,0
+simon,0,0,2,3,8,1,0,0,1
+superdense_coding,0,0,3,4,15,1,0,0,0

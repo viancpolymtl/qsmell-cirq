@@ -31,6 +31,11 @@ import numpy as np
 import pandas as pd
 import cirq
 
+# Ajouter le dossier programs/ au sys.path
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+PROGRAMS_DIR = os.path.join(BASE_DIR, "programs")
+sys.path.append(PROGRAMS_DIR)
+
 # ------------------------------------------------------------ Utility functions
 
 class Justify(enum.Enum):
@@ -136,9 +141,35 @@ def qc2matrix(circuit: cirq.Circuit, justify: Justify, output_file_path: str) ->
 
 # ------------------------------------------------------------------------- Main
 
+def get_circuit_from_module(wrapper, module_name: str) -> cirq.Circuit:
+    """Attempt to retrieve a Cirq circuit from the module."""
+    # 1. Vérifier si une variable `circuit` existe
+    if hasattr(wrapper, 'circuit'):
+        circuit = wrapper.circuit
+        if not isinstance(circuit, cirq.Circuit):
+            raise ValueError(f"Module {module_name} defines 'circuit', but it is not a cirq.Circuit: {type(circuit)}")
+        return circuit
+    
+    # 2. Vérifier si une fonction `get_circuit()` existe
+    if hasattr(wrapper, 'get_circuit') and callable(wrapper.get_circuit):
+        circuit = wrapper.get_circuit()
+        if not isinstance(circuit, cirq.Circuit):
+            raise ValueError(f"Module {module_name}'s get_circuit() did not return a cirq.Circuit: {type(circuit)}")
+        return circuit
+    
+    # 3. Vérifier si une fonction `build_circuit()` existe
+    if hasattr(wrapper, 'build_circuit') and callable(wrapper.build_circuit):
+        circuit = wrapper.build_circuit()
+        if not isinstance(circuit, cirq.Circuit):
+            raise ValueError(f"Module {module_name}'s build_circuit() did not return a cirq.Circuit: {type(circuit)}")
+        return circuit
+    
+    # 4. Si rien ne fonctionne, lever une erreur
+    raise AttributeError(f"Module {module_name} does not define a 'circuit' variable, or a 'get_circuit()' or 'build_circuit()' function returning a cirq.Circuit")
+
 def main():
     parser = argparse.ArgumentParser(description='Convert a Cirq circuit object into a matrix.')
-    parser.add_argument('--module-name', '-i', help='Module name that has the Cirq circuit object `circuit`', required=True, type=str)
+    parser.add_argument('--module-name', '-i', help='Module name that has the Cirq circuit object or function to get the circuit', required=True, type=str)
     parser.add_argument('--justify', '-j', help='`left` (default) or `none`. It refers to where operations should be placed in the output circuit matrix.', required=False, type=Justify, choices=list(Justify), default=Justify.left)
     parser.add_argument('--output-file', '-o', action='store', help='Output file', required=True, type=pathlib.Path)
     args = parser.parse_args()
@@ -147,11 +178,14 @@ def main():
     justify: Justify = args.justify
     output_file: str = args.output_file.as_posix()
 
-    # Ajouter le répertoire courant à sys.path pour éviter ModuleNotFoundError
+    # Ajouter le répertoire courant à sys.path pour éviter ModuleNotFoundError (optionnel, car déjà géré ci-dessus)
     sys.path.append(os.getcwd())
 
+    # Importer le module
     wrapper = importlib.import_module(module_name)
-    circuit = wrapper.circuit  # Assume the module defines a variable `circuit`
+    
+    # Récupérer le circuit en essayant différentes méthodes
+    circuit = get_circuit_from_module(wrapper, module_name)
     
     # Process it
     qc2matrix(circuit, justify, output_file)
