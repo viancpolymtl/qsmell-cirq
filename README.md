@@ -1,3 +1,5 @@
+# QSmell adapté au framework Google Cirq dans le cadre d'un projet final du cours Génie logiciel quantique - LOG8490
+
 # QSmell
 
 QSmell is a tool for detecting quantum-based code smells in programs written in the [Qiskit framework](https://qiskit.org).  As Qiskit v0.37.0 requires Python version >= v3.7.8, QSmell also requires Python v3.7.8.
